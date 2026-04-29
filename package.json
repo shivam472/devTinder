@@ -1,0 +1,23 @@
+{
+  "name": "dev-tinder",
+  "version": "1.0.0",
+  "description": "Tinder for developers",
+  "keywords": [
+    "#dev-tinder"
+  ],
+  "repository": {
+    "type": "git",
+    "url": "dev-tinder"
+  },
+  "license": "ISC",
+  "author": "Shivam Pandey",
+  "type": "commonjs",
+  "main": "index.js",
+  "scripts": {
+    "start": "node src/app.js",
+    "dev": "nodemon src/app.js"
+  },
+  "dependencies": {
+    "express": "^5.2.1"
+  }
+}
