@@ -1,18 +1,11 @@
 const express = require("express");
+const { adminAuth, userAuth } = require("./middlewares/auth");
 
 const app = express();
 
-// auth middleware
-app.use("/", (req, res, next) => {
-  const token = "xyz";
-  const isUserAuthenticated = token === "abc";
-  if (!isUserAuthenticated) {
-    res.status(401).send("Unauthorized request!");
-  } else {
-    next();
-  }
-});
-
+// auth middlewares
+app.use("/admin", adminAuth);
+app.use("/user", userAuth);
 
 app.get("/user/:userId/:name", (req, res) => {
   console.log(req.query); // query parameter: /user?id=123&name=shivam -> response { id: '123', name: 'shivam' }
