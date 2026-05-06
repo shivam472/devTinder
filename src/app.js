@@ -13,7 +13,7 @@ app.post("/signup", async (req, res) => {
     await User.create(req.body);
     res.send("Successfully added user to database");
   } catch (err) {
-    res.status(400).send("Invalid request");
+    res.status(400).send(`Invalid request: ${err.message}`);
   }
 });
 
@@ -82,4 +82,5 @@ connectDB()
   })
   .catch((err) => {
     console.log("Couldn't connect to the database");
+    console.error(err);
   });
