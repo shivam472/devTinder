@@ -46,7 +46,9 @@ app.post("/login", async (req, res) => {
     if (!isMatch) return res.status(401).send("Invalid credentials");
 
     const token = jwt.sign({ id: user.id }, SECRET_KEY, { expiresIn: "1h" });
-    res.cookie("token", token);
+    res.cookie("token", token, {
+      expires: new Date(Date.now() + 8 * 3600000), // cookie will be removed after 8 hours
+    });
     res.send("Successfully logged in!");
   } catch (err) {
     res.status(500).send(`Something went wrong! ${err.message}`);
