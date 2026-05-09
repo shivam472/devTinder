@@ -1,5 +1,5 @@
 const express = require("express");
-const { adminAuth, userAuth } = require("./middlewares/auth");
+const { userAuth, SECRET_KEY } = require("./middlewares/auth");
 const { errorMiddleware } = require("./middlewares/error");
 const { connectDB } = require("./database");
 
@@ -12,8 +12,6 @@ const app = express();
 
 app.use(express.json());
 app.use(cookieParser());
-
-const SECRET_KEY = "DEVTINDER@7477";
 
 app.post("/signup", async (req, res) => {
   try {
@@ -45,7 +43,7 @@ app.post("/login", async (req, res) => {
 
     const passwordHash = user.password;
     const isMatch = await bcrypt.compare(password, passwordHash);
-    if (!isMatch) return res.status(401).send("InvalidCredentials");
+    if (!isMatch) return res.status(401).send("Invalid credentials");
 
     const token = jwt.sign({ id: user.id }, SECRET_KEY, { expiresIn: "1h" });
     res.cookie("token", token);
@@ -55,15 +53,9 @@ app.post("/login", async (req, res) => {
   }
 });
 
-app.get("/profile", async (req, res) => {
+app.get("/profile", userAuth, async (req, res) => {
   try {
-    const { token } = req.cookies;
-    console.log(token);
-    const decoded = jwt.verify(token, SECRET_KEY);
-    const { id } = decoded;
-    const user = await User.findById(id);
-    if (!user) return res.status(404).send("User not found!");
-
+    const user = req.user;
     return res.send(user);
   } catch (err) {
     res.status(500).send(`Something went wrong! ${err.message}`);
