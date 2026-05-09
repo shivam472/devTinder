@@ -64,46 +64,6 @@ app.get("/profile", userAuth, async (req, res) => {
   }
 });
 
-app.get("/feed", async (req, res) => {
-  try {
-    const users = await User.find({});
-    res.send(users);
-  } catch (err) {
-    res.status(400).send("Something went wrong!");
-  }
-});
-
-app.delete("/user", async (req, res) => {
-  const userEmail = req.body.email;
-  try {
-    const result = await User.deleteOne({ email: userEmail });
-    if (result.deletedCount === 0)
-      return res.status(404).send("user not found!");
-    res.send("user deleted successfully");
-  } catch (err) {
-    res.status(400).send("Something went wrong!");
-  }
-});
-
-app.patch("/user", async (req, res) => {
-  const userEmail = req.body.email;
-  const newEmail = req.body.newEmail;
-  try {
-    const result = await User.updateOne(
-      { email: userEmail },
-      {
-        email: newEmail,
-      },
-    );
-    if (result.matchedCount === 0)
-      return res.status(404).send("user not found!");
-
-    res.send("user updated successfully");
-  } catch (err) {
-    res.status(400).send("Something went wrong!");
-  }
-});
-
 connectDB()
   .then(() => {
     app.listen(7777, () => {
